@@ -1,0 +1,6 @@
+../Src/main.c:109:13:leds_off	1
+../Src/main.c:120:13:led_on	1
+../Src/main.c:129:13:leds_init	2
+../Src/main.c:171:13:button_exti_init	1
+../Src/main.c:227:6:EXTI0_IRQHandler	3
+../Src/main.c:258:5:main	1

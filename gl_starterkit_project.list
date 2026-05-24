@@ -1,0 +1,633 @@
+
+gl_starterkit_project.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000188  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         0000030c  08000188  08000188  00001188  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000010  08000494  08000494  00001494  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  080004a4  080004a4  000014ac  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  080004a4  080004a4  000014ac  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  080004a4  080004ac  000014ac  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  080004a4  080004a4  000014a4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  080004a8  080004a8  000014a8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000000  20000000  20000000  000014ac  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .ccmram       00000000  10000000  10000000  000014ac  2**0
+                  CONTENTS
+ 10 .bss          00000020  20000000  20000000  00002000  2**2
+                  ALLOC
+ 11 ._user_heap_stack 00000600  20000020  20000020  00002000  2**0
+                  ALLOC
+ 12 .ARM.attributes 00000030  00000000  00000000  000014ac  2**0
+                  CONTENTS, READONLY
+ 13 .debug_info   00000195  00000000  00000000  000014dc  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_abbrev 00000124  00000000  00000000  00001671  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_aranges 00000070  00000000  00000000  00001798  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_rnglists 0000004c  00000000  00000000  00001808  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_macro  00001042  00000000  00000000  00001854  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_line   000005d1  00000000  00000000  00002896  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .debug_str    0000416f  00000000  00000000  00002e67  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 20 .comment      00000043  00000000  00000000  00006fd6  2**0
+                  CONTENTS, READONLY
+ 21 .debug_frame  000000f4  00000000  00000000  0000701c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 22 .debug_line_str 0000006b  00000000  00000000  00007110  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000188 <__do_global_dtors_aux>:
+ 8000188:	b510      	push	{r4, lr}
+ 800018a:	4c05      	ldr	r4, [pc, #20]	@ (80001a0 <__do_global_dtors_aux+0x18>)
+ 800018c:	7823      	ldrb	r3, [r4, #0]
+ 800018e:	b933      	cbnz	r3, 800019e <__do_global_dtors_aux+0x16>
+ 8000190:	4b04      	ldr	r3, [pc, #16]	@ (80001a4 <__do_global_dtors_aux+0x1c>)
+ 8000192:	b113      	cbz	r3, 800019a <__do_global_dtors_aux+0x12>
+ 8000194:	4804      	ldr	r0, [pc, #16]	@ (80001a8 <__do_global_dtors_aux+0x20>)
+ 8000196:	f3af 8000 	nop.w
+ 800019a:	2301      	movs	r3, #1
+ 800019c:	7023      	strb	r3, [r4, #0]
+ 800019e:	bd10      	pop	{r4, pc}
+ 80001a0:	20000000 	.word	0x20000000
+ 80001a4:	00000000 	.word	0x00000000
+ 80001a8:	0800047c 	.word	0x0800047c
+
+080001ac <frame_dummy>:
+ 80001ac:	b508      	push	{r3, lr}
+ 80001ae:	4b03      	ldr	r3, [pc, #12]	@ (80001bc <frame_dummy+0x10>)
+ 80001b0:	b11b      	cbz	r3, 80001ba <frame_dummy+0xe>
+ 80001b2:	4903      	ldr	r1, [pc, #12]	@ (80001c0 <frame_dummy+0x14>)
+ 80001b4:	4803      	ldr	r0, [pc, #12]	@ (80001c4 <frame_dummy+0x18>)
+ 80001b6:	f3af 8000 	nop.w
+ 80001ba:	bd08      	pop	{r3, pc}
+ 80001bc:	00000000 	.word	0x00000000
+ 80001c0:	20000004 	.word	0x20000004
+ 80001c4:	0800047c 	.word	0x0800047c
+
+080001c8 <leds_off>:
+
+/*
+ * Вимкнення всіх світлодіодів.
+ */
+static void leds_off(void)
+{
+ 80001c8:	b480      	push	{r7}
+ 80001ca:	af00      	add	r7, sp, #0
+    GPIOD_ODR &= ~((1UL << LED_BLUE) |
+ 80001cc:	4b05      	ldr	r3, [pc, #20]	@ (80001e4 <leds_off+0x1c>)
+ 80001ce:	681b      	ldr	r3, [r3, #0]
+ 80001d0:	4a04      	ldr	r2, [pc, #16]	@ (80001e4 <leds_off+0x1c>)
+ 80001d2:	f423 4370 	bic.w	r3, r3, #61440	@ 0xf000
+ 80001d6:	6013      	str	r3, [r2, #0]
+                   (1UL << LED_RED) |
+                   (1UL << LED_ORANGE) |
+                   (1UL << LED_GREEN));
+}
+ 80001d8:	bf00      	nop
+ 80001da:	46bd      	mov	sp, r7
+ 80001dc:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80001e0:	4770      	bx	lr
+ 80001e2:	bf00      	nop
+ 80001e4:	40020c14 	.word	0x40020c14
+
+080001e8 <led_on>:
+
+/*
+ * Увімкнення одного світлодіода.
+ */
+static void led_on(uint32_t led_pin)
+{
+ 80001e8:	b580      	push	{r7, lr}
+ 80001ea:	b082      	sub	sp, #8
+ 80001ec:	af00      	add	r7, sp, #0
+ 80001ee:	6078      	str	r0, [r7, #4]
+    leds_off();
+ 80001f0:	f7ff ffea 	bl	80001c8 <leds_off>
+    GPIOD_ODR |= (1UL << led_pin);
+ 80001f4:	4b06      	ldr	r3, [pc, #24]	@ (8000210 <led_on+0x28>)
+ 80001f6:	681a      	ldr	r2, [r3, #0]
+ 80001f8:	2101      	movs	r1, #1
+ 80001fa:	687b      	ldr	r3, [r7, #4]
+ 80001fc:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000200:	4903      	ldr	r1, [pc, #12]	@ (8000210 <led_on+0x28>)
+ 8000202:	4313      	orrs	r3, r2
+ 8000204:	600b      	str	r3, [r1, #0]
+}
+ 8000206:	bf00      	nop
+ 8000208:	3708      	adds	r7, #8
+ 800020a:	46bd      	mov	sp, r7
+ 800020c:	bd80      	pop	{r7, pc}
+ 800020e:	bf00      	nop
+ 8000210:	40020c14 	.word	0x40020c14
+
+08000214 <leds_init>:
+
+/*
+ * Налаштування світлодіодів PD12-PD15 як GPIO Output.
+ */
+static void leds_init(void)
+{
+ 8000214:	b580      	push	{r7, lr}
+ 8000216:	b082      	sub	sp, #8
+ 8000218:	af00      	add	r7, sp, #0
+    /*
+     * Увімкнення тактування GPIOD.
+     */
+    RCC_AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+ 800021a:	4b28      	ldr	r3, [pc, #160]	@ (80002bc <leds_init+0xa8>)
+ 800021c:	681b      	ldr	r3, [r3, #0]
+ 800021e:	4a27      	ldr	r2, [pc, #156]	@ (80002bc <leds_init+0xa8>)
+ 8000220:	f043 0308 	orr.w	r3, r3, #8
+ 8000224:	6013      	str	r3, [r2, #0]
+    /*
+     * Налаштування PD12, PD13, PD14, PD15 як виходи.
+     * Для кожного піна в MODER використовується 2 біти.
+     * 01 - output mode.
+     */
+    for (uint32_t pin = LED_GREEN; pin <= LED_BLUE; pin++)
+ 8000226:	230c      	movs	r3, #12
+ 8000228:	607b      	str	r3, [r7, #4]
+ 800022a:	e037      	b.n	800029c <leds_init+0x88>
+    {
+        GPIOD_MODER &= ~(3UL << (pin * 2));
+ 800022c:	4b24      	ldr	r3, [pc, #144]	@ (80002c0 <leds_init+0xac>)
+ 800022e:	681a      	ldr	r2, [r3, #0]
+ 8000230:	687b      	ldr	r3, [r7, #4]
+ 8000232:	005b      	lsls	r3, r3, #1
+ 8000234:	2103      	movs	r1, #3
+ 8000236:	fa01 f303 	lsl.w	r3, r1, r3
+ 800023a:	43db      	mvns	r3, r3
+ 800023c:	4920      	ldr	r1, [pc, #128]	@ (80002c0 <leds_init+0xac>)
+ 800023e:	4013      	ands	r3, r2
+ 8000240:	600b      	str	r3, [r1, #0]
+        GPIOD_MODER |=  (1UL << (pin * 2));
+ 8000242:	4b1f      	ldr	r3, [pc, #124]	@ (80002c0 <leds_init+0xac>)
+ 8000244:	681a      	ldr	r2, [r3, #0]
+ 8000246:	687b      	ldr	r3, [r7, #4]
+ 8000248:	005b      	lsls	r3, r3, #1
+ 800024a:	2101      	movs	r1, #1
+ 800024c:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000250:	491b      	ldr	r1, [pc, #108]	@ (80002c0 <leds_init+0xac>)
+ 8000252:	4313      	orrs	r3, r2
+ 8000254:	600b      	str	r3, [r1, #0]
+
+        /*
+         * Push-pull output.
+         */
+        GPIOD_OTYPER &= ~(1UL << pin);
+ 8000256:	4b1b      	ldr	r3, [pc, #108]	@ (80002c4 <leds_init+0xb0>)
+ 8000258:	681a      	ldr	r2, [r3, #0]
+ 800025a:	2101      	movs	r1, #1
+ 800025c:	687b      	ldr	r3, [r7, #4]
+ 800025e:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000262:	43db      	mvns	r3, r3
+ 8000264:	4917      	ldr	r1, [pc, #92]	@ (80002c4 <leds_init+0xb0>)
+ 8000266:	4013      	ands	r3, r2
+ 8000268:	600b      	str	r3, [r1, #0]
+
+        /*
+         * Low speed.
+         */
+        GPIOD_OSPEEDR &= ~(3UL << (pin * 2));
+ 800026a:	4b17      	ldr	r3, [pc, #92]	@ (80002c8 <leds_init+0xb4>)
+ 800026c:	681a      	ldr	r2, [r3, #0]
+ 800026e:	687b      	ldr	r3, [r7, #4]
+ 8000270:	005b      	lsls	r3, r3, #1
+ 8000272:	2103      	movs	r1, #3
+ 8000274:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000278:	43db      	mvns	r3, r3
+ 800027a:	4913      	ldr	r1, [pc, #76]	@ (80002c8 <leds_init+0xb4>)
+ 800027c:	4013      	ands	r3, r2
+ 800027e:	600b      	str	r3, [r1, #0]
+
+        /*
+         * No pull-up, no pull-down.
+         */
+        GPIOD_PUPDR &= ~(3UL << (pin * 2));
+ 8000280:	4b12      	ldr	r3, [pc, #72]	@ (80002cc <leds_init+0xb8>)
+ 8000282:	681a      	ldr	r2, [r3, #0]
+ 8000284:	687b      	ldr	r3, [r7, #4]
+ 8000286:	005b      	lsls	r3, r3, #1
+ 8000288:	2103      	movs	r1, #3
+ 800028a:	fa01 f303 	lsl.w	r3, r1, r3
+ 800028e:	43db      	mvns	r3, r3
+ 8000290:	490e      	ldr	r1, [pc, #56]	@ (80002cc <leds_init+0xb8>)
+ 8000292:	4013      	ands	r3, r2
+ 8000294:	600b      	str	r3, [r1, #0]
+    for (uint32_t pin = LED_GREEN; pin <= LED_BLUE; pin++)
+ 8000296:	687b      	ldr	r3, [r7, #4]
+ 8000298:	3301      	adds	r3, #1
+ 800029a:	607b      	str	r3, [r7, #4]
+ 800029c:	687b      	ldr	r3, [r7, #4]
+ 800029e:	2b0f      	cmp	r3, #15
+ 80002a0:	d9c4      	bls.n	800022c <leds_init+0x18>
+    }
+
+    /*
+     * На старті увімкнений синій світлодіод.
+     */
+    led_on(leds[current_led]);
+ 80002a2:	4b0b      	ldr	r3, [pc, #44]	@ (80002d0 <leds_init+0xbc>)
+ 80002a4:	681b      	ldr	r3, [r3, #0]
+ 80002a6:	4a0b      	ldr	r2, [pc, #44]	@ (80002d4 <leds_init+0xc0>)
+ 80002a8:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 80002ac:	4618      	mov	r0, r3
+ 80002ae:	f7ff ff9b 	bl	80001e8 <led_on>
+}
+ 80002b2:	bf00      	nop
+ 80002b4:	3708      	adds	r7, #8
+ 80002b6:	46bd      	mov	sp, r7
+ 80002b8:	bd80      	pop	{r7, pc}
+ 80002ba:	bf00      	nop
+ 80002bc:	40023830 	.word	0x40023830
+ 80002c0:	40020c00 	.word	0x40020c00
+ 80002c4:	40020c04 	.word	0x40020c04
+ 80002c8:	40020c08 	.word	0x40020c08
+ 80002cc:	40020c0c 	.word	0x40020c0c
+ 80002d0:	2000001c 	.word	0x2000001c
+ 80002d4:	08000494 	.word	0x08000494
+
+080002d8 <button_exti_init>:
+
+/*
+ * Налаштування кнопки PA0 та зовнішнього переривання EXTI0.
+ */
+static void button_exti_init(void)
+{
+ 80002d8:	b480      	push	{r7}
+ 80002da:	af00      	add	r7, sp, #0
+    /*
+     * Увімкнення тактування GPIOA та SYSCFG.
+     */
+    RCC_AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+ 80002dc:	4b1e      	ldr	r3, [pc, #120]	@ (8000358 <button_exti_init+0x80>)
+ 80002de:	681b      	ldr	r3, [r3, #0]
+ 80002e0:	4a1d      	ldr	r2, [pc, #116]	@ (8000358 <button_exti_init+0x80>)
+ 80002e2:	f043 0301 	orr.w	r3, r3, #1
+ 80002e6:	6013      	str	r3, [r2, #0]
+    RCC_APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+ 80002e8:	4b1c      	ldr	r3, [pc, #112]	@ (800035c <button_exti_init+0x84>)
+ 80002ea:	681b      	ldr	r3, [r3, #0]
+ 80002ec:	4a1b      	ldr	r2, [pc, #108]	@ (800035c <button_exti_init+0x84>)
+ 80002ee:	f443 4380 	orr.w	r3, r3, #16384	@ 0x4000
+ 80002f2:	6013      	str	r3, [r2, #0]
+
+    /*
+     * PA0 як input.
+     */
+    GPIOA_MODER &= ~(3UL << (BUTTON_PIN * 2));
+ 80002f4:	4b1a      	ldr	r3, [pc, #104]	@ (8000360 <button_exti_init+0x88>)
+ 80002f6:	681b      	ldr	r3, [r3, #0]
+ 80002f8:	4a19      	ldr	r2, [pc, #100]	@ (8000360 <button_exti_init+0x88>)
+ 80002fa:	f023 0303 	bic.w	r3, r3, #3
+ 80002fe:	6013      	str	r3, [r2, #0]
+
+    /*
+     * Без внутрішнього pull-up / pull-down.
+     * На платі кнопка має зовнішню підтяжку.
+     */
+    GPIOA_PUPDR &= ~(3UL << (BUTTON_PIN * 2));
+ 8000300:	4b18      	ldr	r3, [pc, #96]	@ (8000364 <button_exti_init+0x8c>)
+ 8000302:	681b      	ldr	r3, [r3, #0]
+ 8000304:	4a17      	ldr	r2, [pc, #92]	@ (8000364 <button_exti_init+0x8c>)
+ 8000306:	f023 0303 	bic.w	r3, r3, #3
+ 800030a:	6013      	str	r3, [r2, #0]
+
+    /*
+     * EXTI0 підключаємо до PA0.
+     * Для EXTI0 у SYSCFG_EXTICR1 потрібно значення 0000 - Port A.
+     */
+    SYSCFG_EXTICR1 &= ~(0xFUL << 0);
+ 800030c:	4b16      	ldr	r3, [pc, #88]	@ (8000368 <button_exti_init+0x90>)
+ 800030e:	681b      	ldr	r3, [r3, #0]
+ 8000310:	4a15      	ldr	r2, [pc, #84]	@ (8000368 <button_exti_init+0x90>)
+ 8000312:	f023 030f 	bic.w	r3, r3, #15
+ 8000316:	6013      	str	r3, [r2, #0]
+
+    /*
+     * Дозволяємо переривання по лінії EXTI0.
+     */
+    EXTI_IMR |= (1UL << 0);
+ 8000318:	4b14      	ldr	r3, [pc, #80]	@ (800036c <button_exti_init+0x94>)
+ 800031a:	681b      	ldr	r3, [r3, #0]
+ 800031c:	4a13      	ldr	r2, [pc, #76]	@ (800036c <button_exti_init+0x94>)
+ 800031e:	f043 0301 	orr.w	r3, r3, #1
+ 8000322:	6013      	str	r3, [r2, #0]
+
+    /*
+     * Переривання по фронту наростання.
+     * При натисканні кнопки на PA0 з'являється логічна одиниця.
+     */
+    EXTI_RTSR |= (1UL << 0);
+ 8000324:	4b12      	ldr	r3, [pc, #72]	@ (8000370 <button_exti_init+0x98>)
+ 8000326:	681b      	ldr	r3, [r3, #0]
+ 8000328:	4a11      	ldr	r2, [pc, #68]	@ (8000370 <button_exti_init+0x98>)
+ 800032a:	f043 0301 	orr.w	r3, r3, #1
+ 800032e:	6013      	str	r3, [r2, #0]
+
+    /*
+     * Спадний фронт не використовуємо.
+     */
+    EXTI_FTSR &= ~(1UL << 0);
+ 8000330:	4b10      	ldr	r3, [pc, #64]	@ (8000374 <button_exti_init+0x9c>)
+ 8000332:	681b      	ldr	r3, [r3, #0]
+ 8000334:	4a0f      	ldr	r2, [pc, #60]	@ (8000374 <button_exti_init+0x9c>)
+ 8000336:	f023 0301 	bic.w	r3, r3, #1
+ 800033a:	6013      	str	r3, [r2, #0]
+
+    /*
+     * Очищення pending flag для EXTI0.
+     */
+    EXTI_PR = (1UL << 0);
+ 800033c:	4b0e      	ldr	r3, [pc, #56]	@ (8000378 <button_exti_init+0xa0>)
+ 800033e:	2201      	movs	r2, #1
+ 8000340:	601a      	str	r2, [r3, #0]
+
+    /*
+     * Увімкнення EXTI0 interrupt у NVIC.
+     */
+    NVIC_ISER0 |= (1UL << EXTI0_IRQ_NUMBER);
+ 8000342:	4b0e      	ldr	r3, [pc, #56]	@ (800037c <button_exti_init+0xa4>)
+ 8000344:	681b      	ldr	r3, [r3, #0]
+ 8000346:	4a0d      	ldr	r2, [pc, #52]	@ (800037c <button_exti_init+0xa4>)
+ 8000348:	f043 0340 	orr.w	r3, r3, #64	@ 0x40
+ 800034c:	6013      	str	r3, [r2, #0]
+}
+ 800034e:	bf00      	nop
+ 8000350:	46bd      	mov	sp, r7
+ 8000352:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000356:	4770      	bx	lr
+ 8000358:	40023830 	.word	0x40023830
+ 800035c:	40023844 	.word	0x40023844
+ 8000360:	40020000 	.word	0x40020000
+ 8000364:	4002000c 	.word	0x4002000c
+ 8000368:	40013808 	.word	0x40013808
+ 800036c:	40013c00 	.word	0x40013c00
+ 8000370:	40013c08 	.word	0x40013c08
+ 8000374:	40013c0c 	.word	0x40013c0c
+ 8000378:	40013c14 	.word	0x40013c14
+ 800037c:	e000e100 	.word	0xe000e100
+
+08000380 <EXTI0_IRQHandler>:
+/*
+ * Обробник переривання EXTI0.
+ * Викликається при натисканні кнопки PA0.
+ */
+void EXTI0_IRQHandler(void)
+{
+ 8000380:	b580      	push	{r7, lr}
+ 8000382:	af00      	add	r7, sp, #0
+    /*
+     * Перевіряємо, чи переривання прийшло саме від EXTI0.
+     */
+    if (EXTI_PR & (1UL << 0))
+ 8000384:	4b0f      	ldr	r3, [pc, #60]	@ (80003c4 <EXTI0_IRQHandler+0x44>)
+ 8000386:	681b      	ldr	r3, [r3, #0]
+ 8000388:	f003 0301 	and.w	r3, r3, #1
+ 800038c:	2b00      	cmp	r3, #0
+ 800038e:	d016      	beq.n	80003be <EXTI0_IRQHandler+0x3e>
+    {
+        /*
+         * Очищуємо pending flag.
+         * У STM32 він очищується записом 1.
+         */
+        EXTI_PR = (1UL << 0);
+ 8000390:	4b0c      	ldr	r3, [pc, #48]	@ (80003c4 <EXTI0_IRQHandler+0x44>)
+ 8000392:	2201      	movs	r2, #1
+ 8000394:	601a      	str	r2, [r3, #0]
+
+        /*
+         * Переходимо до наступного світлодіода.
+         * Порядок: PD15 -> PD14 -> PD13 -> PD12.
+         */
+        current_led++;
+ 8000396:	4b0c      	ldr	r3, [pc, #48]	@ (80003c8 <EXTI0_IRQHandler+0x48>)
+ 8000398:	681b      	ldr	r3, [r3, #0]
+ 800039a:	3301      	adds	r3, #1
+ 800039c:	4a0a      	ldr	r2, [pc, #40]	@ (80003c8 <EXTI0_IRQHandler+0x48>)
+ 800039e:	6013      	str	r3, [r2, #0]
+
+        if (current_led >= 4)
+ 80003a0:	4b09      	ldr	r3, [pc, #36]	@ (80003c8 <EXTI0_IRQHandler+0x48>)
+ 80003a2:	681b      	ldr	r3, [r3, #0]
+ 80003a4:	2b03      	cmp	r3, #3
+ 80003a6:	d902      	bls.n	80003ae <EXTI0_IRQHandler+0x2e>
+        {
+            current_led = 0;
+ 80003a8:	4b07      	ldr	r3, [pc, #28]	@ (80003c8 <EXTI0_IRQHandler+0x48>)
+ 80003aa:	2200      	movs	r2, #0
+ 80003ac:	601a      	str	r2, [r3, #0]
+        }
+
+        /*
+         * Увімкнути тільки один світлодіод.
+         */
+        led_on(leds[current_led]);
+ 80003ae:	4b06      	ldr	r3, [pc, #24]	@ (80003c8 <EXTI0_IRQHandler+0x48>)
+ 80003b0:	681b      	ldr	r3, [r3, #0]
+ 80003b2:	4a06      	ldr	r2, [pc, #24]	@ (80003cc <EXTI0_IRQHandler+0x4c>)
+ 80003b4:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 80003b8:	4618      	mov	r0, r3
+ 80003ba:	f7ff ff15 	bl	80001e8 <led_on>
+    }
+}
+ 80003be:	bf00      	nop
+ 80003c0:	bd80      	pop	{r7, pc}
+ 80003c2:	bf00      	nop
+ 80003c4:	40013c14 	.word	0x40013c14
+ 80003c8:	2000001c 	.word	0x2000001c
+ 80003cc:	08000494 	.word	0x08000494
+
+080003d0 <main>:
+
+int main(void)
+{
+ 80003d0:	b580      	push	{r7, lr}
+ 80003d2:	af00      	add	r7, sp, #0
+    /*
+     * Ініціалізація світлодіодів.
+     */
+    leds_init();
+ 80003d4:	f7ff ff1e 	bl	8000214 <leds_init>
+
+    /*
+     * Ініціалізація кнопки PA0 та EXTI0.
+     */
+    button_exti_init();
+ 80003d8:	f7ff ff7e 	bl	80002d8 <button_exti_init>
+
+    while (1)
+ 80003dc:	bf00      	nop
+ 80003de:	e7fd      	b.n	80003dc <main+0xc>
+
+080003e0 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 80003e0:	480d      	ldr	r0, [pc, #52]	@ (8000418 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 80003e2:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 80003e4:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 80003e8:	480c      	ldr	r0, [pc, #48]	@ (800041c <LoopForever+0x6>)
+  ldr r1, =_edata
+ 80003ea:	490d      	ldr	r1, [pc, #52]	@ (8000420 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 80003ec:	4a0d      	ldr	r2, [pc, #52]	@ (8000424 <LoopForever+0xe>)
+  movs r3, #0
+ 80003ee:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 80003f0:	e002      	b.n	80003f8 <LoopCopyDataInit>
+
+080003f2 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 80003f2:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80003f4:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80003f6:	3304      	adds	r3, #4
+
+080003f8 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 80003f8:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 80003fa:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 80003fc:	d3f9      	bcc.n	80003f2 <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 80003fe:	4a0a      	ldr	r2, [pc, #40]	@ (8000428 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000400:	4c0a      	ldr	r4, [pc, #40]	@ (800042c <LoopForever+0x16>)
+  movs r3, #0
+ 8000402:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000404:	e001      	b.n	800040a <LoopFillZerobss>
+
+08000406 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000406:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000408:	3204      	adds	r2, #4
+
+0800040a <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 800040a:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 800040c:	d3fb      	bcc.n	8000406 <FillZerobss>
+
+
+/* Call static constructors */
+  bl __libc_init_array
+ 800040e:	f000 f811 	bl	8000434 <__libc_init_array>
+/* Call the application's entry point.*/
+
+  bl main
+ 8000412:	f7ff ffdd 	bl	80003d0 <main>
+
+08000416 <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 8000416:	e7fe      	b.n	8000416 <LoopForever>
+  ldr   r0, =_estack
+ 8000418:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 800041c:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000420:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8000424:	080004ac 	.word	0x080004ac
+  ldr r2, =_sbss
+ 8000428:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 800042c:	20000020 	.word	0x20000020
+
+08000430 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000430:	e7fe      	b.n	8000430 <ADC_IRQHandler>
+	...
+
+08000434 <__libc_init_array>:
+ 8000434:	b570      	push	{r4, r5, r6, lr}
+ 8000436:	4b0d      	ldr	r3, [pc, #52]	@ (800046c <__libc_init_array+0x38>)
+ 8000438:	4d0d      	ldr	r5, [pc, #52]	@ (8000470 <__libc_init_array+0x3c>)
+ 800043a:	1b5b      	subs	r3, r3, r5
+ 800043c:	109c      	asrs	r4, r3, #2
+ 800043e:	2600      	movs	r6, #0
+ 8000440:	42a6      	cmp	r6, r4
+ 8000442:	d109      	bne.n	8000458 <__libc_init_array+0x24>
+ 8000444:	f000 f81a 	bl	800047c <_init>
+ 8000448:	4d0a      	ldr	r5, [pc, #40]	@ (8000474 <__libc_init_array+0x40>)
+ 800044a:	4b0b      	ldr	r3, [pc, #44]	@ (8000478 <__libc_init_array+0x44>)
+ 800044c:	1b5b      	subs	r3, r3, r5
+ 800044e:	109c      	asrs	r4, r3, #2
+ 8000450:	2600      	movs	r6, #0
+ 8000452:	42a6      	cmp	r6, r4
+ 8000454:	d105      	bne.n	8000462 <__libc_init_array+0x2e>
+ 8000456:	bd70      	pop	{r4, r5, r6, pc}
+ 8000458:	f855 3b04 	ldr.w	r3, [r5], #4
+ 800045c:	4798      	blx	r3
+ 800045e:	3601      	adds	r6, #1
+ 8000460:	e7ee      	b.n	8000440 <__libc_init_array+0xc>
+ 8000462:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000466:	4798      	blx	r3
+ 8000468:	3601      	adds	r6, #1
+ 800046a:	e7f2      	b.n	8000452 <__libc_init_array+0x1e>
+ 800046c:	080004a4 	.word	0x080004a4
+ 8000470:	080004a4 	.word	0x080004a4
+ 8000474:	080004a4 	.word	0x080004a4
+ 8000478:	080004a8 	.word	0x080004a8
+
+0800047c <_init>:
+ 800047c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 800047e:	bf00      	nop
+ 8000480:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000482:	bc08      	pop	{r3}
+ 8000484:	469e      	mov	lr, r3
+ 8000486:	4770      	bx	lr
+
+08000488 <_fini>:
+ 8000488:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 800048a:	bf00      	nop
+ 800048c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800048e:	bc08      	pop	{r3}
+ 8000490:	469e      	mov	lr, r3
+ 8000492:	4770      	bx	lr
